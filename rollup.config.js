@@ -3,6 +3,7 @@
 import typescript from '@rollup/plugin-typescript';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import { dts } from 'rollup-plugin-dts';
 
 /**
  * @type {import('rollup').RollupOptions}
@@ -17,11 +18,15 @@ export default [
     plugins: [
       resolve(), // 使用 @rollup/plugin-node-resolve 解析 node_modules 中的模块
       commonjs(), // 使用 @rollup/plugin-commonjs 解析 CommonJS 模块
-      typescript({
-        allowImportingTsExtensions: true,
-        noEmit: true,
-        exclude: [],
-      }), // 使用 @rollup/plugin-typescript 处理 TypeScript 文件
+      typescript(), // 使用 @rollup/plugin-typescript 处理 TypeScript 文件
     ],
+  },
+  {
+    input: 'src/index.ts',
+    output: {
+      file: 'dist/store.d.ts',
+      format: 'es',
+    },
+    plugins: [dts()],
   },
 ];
