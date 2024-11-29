@@ -1,0 +1,16 @@
+{
+  "name": "demo",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite"
+  },
+  "keywords": [],
+  "author": "abearxiong <xiongxiao@xiongxiao.me>",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@kevisual/store": "link:.."
+  }
+}
