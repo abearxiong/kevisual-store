@@ -10,7 +10,7 @@ import { dts } from 'rollup-plugin-dts';
  */
 export default [
   {
-    input: 'src/index.ts', // TypeScript 入口文件
+    input: 'src/store.ts', // TypeScript 入口文件
     output: {
       file: 'dist/store.js', // 输出文件
       format: 'es', // 输出格式设置为 ES 模块
@@ -22,9 +22,57 @@ export default [
     ],
   },
   {
-    input: 'src/index.ts',
+    input: 'src/store.ts',
     output: {
       file: 'dist/store.d.ts',
+      format: 'es',
+    },
+    plugins: [dts()],
+  },
+  {
+    input: 'src/web-config.ts',
+    output: {
+      file: 'dist/web-config.js',
+      format: 'cjs',
+    },
+    plugins: [resolve(), commonjs(), typescript()],
+  },
+  {
+    input: 'src/web-config.ts',
+    output: {
+      file: 'dist/web-config.d.ts',
+      format: 'es',
+    },
+    plugins: [dts()],
+  },
+  {
+    input: 'src/web-context.ts',
+    output: {
+      file: 'dist/web-context.js',
+      format: 'es',
+    },
+    plugins: [resolve(), commonjs(), typescript()],
+  },
+  {
+    input: 'src/web-context.ts',
+    output: {
+      file: 'dist/web-context.d.ts',
+      format: 'es',
+    },
+    plugins: [dts()],
+  },
+  {
+    input: 'src/page.ts',
+    output: {
+      file: 'dist/web-page.js',
+      format: 'es',
+    },
+    plugins: [resolve(), commonjs(), typescript()],
+  },
+  {
+    input: 'src/page.ts',
+    output: {
+      file: 'dist/web-page.d.ts',
       format: 'es',
     },
     plugins: [dts()],
