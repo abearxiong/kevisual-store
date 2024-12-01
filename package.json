@@ -60,9 +60,14 @@
     "./page": {
       "import": "./dist/web-page.js",
       "require": "./dist/web-page.js"
+    },
+    "./web": {
+      "import": "./dist/web.js",
+      "require": "./dist/web.js"
     }
   },
   "dependencies": {
+    "eventemitter3": "^5.0.1",
     "path-to-regexp": "^8.2.0"
   }
 }

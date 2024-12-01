@@ -16,7 +16,7 @@ export default [
       format: 'es', // 输出格式设置为 ES 模块
     },
     plugins: [
-      resolve(), // 使用 @rollup/plugin-node-resolve 解析 node_modules 中的模块
+      resolve({ browser: true }), // 使用 @rollup/plugin-node-resolve 解析 node_modules 中的模块
       commonjs(), // 使用 @rollup/plugin-commonjs 解析 CommonJS 模块
       typescript(), // 使用 @rollup/plugin-typescript 处理 TypeScript 文件
     ],
@@ -33,9 +33,9 @@ export default [
     input: 'src/web-config.ts',
     output: {
       file: 'dist/web-config.js',
-      format: 'cjs',
+      format: 'es',
     },
-    plugins: [resolve(), commonjs(), typescript()],
+    plugins: [resolve({ browser: true }), commonjs(), typescript()],
   },
   {
     input: 'src/web-config.ts',
@@ -51,7 +51,7 @@ export default [
       file: 'dist/web-context.js',
       format: 'es',
     },
-    plugins: [resolve(), commonjs(), typescript()],
+    plugins: [resolve({ browser: true }), commonjs(), typescript()],
   },
   {
     input: 'src/web-context.ts',
@@ -67,12 +67,28 @@ export default [
       file: 'dist/web-page.js',
       format: 'es',
     },
-    plugins: [resolve(), commonjs(), typescript()],
+    plugins: [resolve({ browser: true }), commonjs(), typescript()],
   },
   {
     input: 'src/page.ts',
     output: {
       file: 'dist/web-page.d.ts',
+      format: 'es',
+    },
+    plugins: [dts()],
+  },
+  {
+    input: 'src/web.ts',
+    output: {
+      file: 'dist/web.js',
+      format: 'es',
+    },
+    plugins: [resolve({ browser: true }), commonjs(), typescript()],
+  },
+  {
+    input: 'src/web.ts',
+    output: {
+      file: 'dist/web.d.ts',
       format: 'es',
     },
     plugins: [dts()],

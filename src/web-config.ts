@@ -11,7 +11,7 @@ export const useConfig = (initConfig?: GlobalConfig) => {
   return _config;
 };
 
-export const useConfigKey = <T>(key: string, init: () => T): T => {
+export const useConfigKey = <T>(key: string, init?: () => T): T => {
   const _config = useConfig({});
   if (key && init) {
     _config[key] = init();
@@ -23,7 +23,7 @@ export const useConfigKey = <T>(key: string, init: () => T): T => {
   return _config as any;
 };
 
-export const useConfigKeySync = async <T = any>(key: string, init: () => Promise<T>): Promise<T> => {
+export const useConfigKeySync = async <T = any>(key: string, init?: () => Promise<T>): Promise<T> => {
   const _config = useConfig({});
   if (key && init) {
     _config[key] = await init();

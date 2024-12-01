@@ -11,7 +11,7 @@ export const useContext = (initContext?: GlobalContext) => {
   return _context;
 };
 
-export const useContextKey = <T>(key: string, init: () => T): T => {
+export const useContextKey = <T>(key: string, init?: () => T): T => {
   const _context = useContext({});
   if (key && init) {
     _context[key] = init();
@@ -23,7 +23,7 @@ export const useContextKey = <T>(key: string, init: () => T): T => {
   return _context as any;
 };
 
-export const useContextKeySync = async <T = any>(key: string, init: () => Promise<T>): Promise<T> => {
+export const useContextKeySync = async <T = any>(key: string, init?: () => Promise<T>): Promise<T> => {
   const _context = useContext({});
   if (key && init) {
     _context[key] = await init();
