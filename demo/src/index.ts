@@ -4,9 +4,15 @@ import { Page } from '@kevisual/store/page';
 const page = new Page({
   isListen: true,
 });
-
+page.addPage('/', 'home');
 page.addPage('/:id', 'user');
-
+page.subscribe(
+  'home',
+  (params, state) => {
+    console.log('home', params, 'state', state);
+    return;
+  },
+);
 page.subscribe('user', (params, state) => {
   console.log('user', params, 'state', state);
   return;

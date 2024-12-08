@@ -1,12 +1,13 @@
 {
   "name": "@kevisual/store",
-  "version": "0.0.1-alpha.4",
+  "version": "0.0.1-alpha.5",
   "main": "dist/store.js",
   "module": "dist/store.js",
   "types": "dist/store.d.ts",
   "private": false,
   "type": "module",
   "scripts": {
+    "dev": "rollup -c -w",
     "build": "npm run clean && rollup -c",
     "build:app": "npm run build && rsync dist/* ../deploy/dist",
     "clean": "rm -rf dist"

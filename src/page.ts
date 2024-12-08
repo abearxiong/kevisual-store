@@ -38,12 +38,22 @@ export class Page {
       this.listen();
     }
   }
-  popstate(event?: PopStateEvent, manual?: boolean) {
+  popstate(event?: PopStateEvent, manualOpts?: { id?: string; type: 'singal' | 'all' }) {
     const pathname = window.location.pathname;
+    if (manualOpts) {
+      if (manualOpts.type === 'singal') {
+        const item = this.callbacks.find((item) => item.id === manualOpts.id);
+        if (item) {
+          const result = this.check(item.key, pathname);
+          result && item.fn?.(result.params, event.state, { event });
+        }
+        return;
+      }
+    }
     // manual 为true时，表示手动调用，不需要检查是否相等
     this.callbacks.forEach((item) => {
       const result = this.check(item.key, pathname);
-      result && item.fn?.(result.params, event.state, { event, manual });
+      result && item.fn?.(result.params, event.state, { event, manualOpts });
     });
   }
   listen() {
@@ -118,7 +128,12 @@ export class Page {
     }
     this.callbacks.push({ key, fn, id: id, path });
     if (runImmediately) {
-      this.popstate({ state: window.history.state } as any, true);
+      const location = window.location;
+      const pathname = opts?.pathname ?? location.pathname;
+      const result = this.check(key, pathname);
+      if (result) {
+        this.popstate({ state: window.history.state } as any, { id, type: 'singal' });
+      }
     }
     return () => {
       this.callbacks = this.callbacks.filter((item) => item.id !== id);
@@ -169,18 +184,18 @@ export class Page {
     window.history.pushState(state, '', this.basename + path);
     let _check = check ?? true;
     if (_check) {
-      this.popstate({ state } as any, true);
+      this.popstate({ state } as any, { type: 'all' });
     }
   }
   replace(path: string, state?: any, check?: boolean) {
     let _check = check ?? true;
     window.history.replaceState(state, '', this.basename + path);
     if (_check) {
-      this.popstate({ state } as any, true);
+      this.popstate({ state } as any, { type: 'all' });
     }
   }
   refresh() {
     const state = window.history.state;
-    this.popstate({ state } as any, true);
+    this.popstate({ state } as any, { type: 'all' });
   }
 }

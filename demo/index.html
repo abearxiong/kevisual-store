@@ -11,6 +11,89 @@
   <h1>Welcome to the Demo Page</h1>
   <p>This is a basic HTML template.</p>
   <script src="./src/index.ts" type="module"></script>
+  <form action="/submit" method="POST">
+    <label for="browser">选择浏览器：</label>
+    <input list="browsers" id="browser" name="browser" />
+    <datalist id="browsers">
+      <option value="Chrome">
+      <option value="Firefox">
+      <option value="Safari">
+      <option value="Edge">
+    </datalist>
+    <button type="submit">提交</button>
+  </form>
+
+  <style>
+    .custom-datalist-wrapper {
+      position: relative;
+      width: 200px;
+    }
+
+    .custom-datalist-input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .custom-datalist-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      max-height: 150px;
+      overflow-y: auto;
+      display: none;
+      z-index: 1000;
+    }
+
+    .custom-datalist-dropdown.active {
+      display: block;
+    }
+
+    .custom-datalist-item {
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    .custom-datalist-item:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
+
+  <div class="custom-datalist-wrapper">
+    <input type="text" class="custom-datalist-input" placeholder="选择或输入..." oninput="filterDatalist(this)" />
+    <div class="custom-datalist-dropdown" id="datalist-dropdown">
+      <div class="custom-datalist-item" onclick="selectDatalistItem(this)">Apple</div>
+      <div class="custom-datalist-item" onclick="selectDatalistItem(this)">Banana</div>
+      <div class="custom-datalist-item" onclick="selectDatalistItem(this)">Cherry</div>
+      <div class="custom-datalist-item" onclick="selectDatalistItem(this)">Date</div>
+    </div>
+  </div>
+
+  <script>
+    function filterDatalist(input) {
+      const filter = input.value.toLowerCase();
+      const dropdown = document.getElementById('datalist-dropdown');
+      const items = dropdown.querySelectorAll('.custom-datalist-item');
+
+      dropdown.classList.add('active');
+      items.forEach(item => {
+        item.style.display = item.textContent.toLowerCase().includes(filter) ? 'block' : 'none';
+      });
+    }
+
+    function selectDatalistItem(item) {
+      const input = document.querySelector('.custom-datalist-input');
+      input.value = item.textContent;
+
+      const dropdown = document.getElementById('datalist-dropdown');
+      dropdown.classList.remove('active');
+    }
+  </script>
 </body>
 
 </html>
