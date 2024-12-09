@@ -4,6 +4,7 @@ import { Page } from '@kevisual/store/page';
 const page = new Page({
   isListen: true,
 });
+page.basename = '';
 page.addPage('/', 'home');
 page.addPage('/:id', 'user');
 page.subscribe(
@@ -21,3 +22,6 @@ page.subscribe('user', (params, state) => {
 // page.navigate('/c', { id: 3 });
 // page.navigate('/c', { id: 2 });
 // page.refresh();
+
+// @ts-ignore
+window.page = page;
