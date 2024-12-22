@@ -4,6 +4,7 @@ type GlobalEnv = {
   name?: string;
   [key: string]: any;
 };
+// 从window对象中获取全局的环境变量，如果没有则初始化一个
 export const useEnv = (initEnv?: GlobalEnv, initKey = 'config') => {
   const env: GlobalEnv = (window as any)[initKey];
   const _env = env || initEnv;
@@ -17,6 +18,7 @@ export const useEnv = (initEnv?: GlobalEnv, initKey = 'config') => {
   return window[initKey] as GlobalEnv;
 };
 
+// 从全局环境变量中获取指定的key值，如果没有则初始化一个, key不存在，返回Env对象
 export const useEnvKey = <T = any>(key: string, init?: () => T | null, initKey = 'config'): T => {
   const _env = useEnv({}, initKey);
   if (key && _env[key]) {

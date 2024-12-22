@@ -4,6 +4,7 @@ import typescript from '@rollup/plugin-typescript';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import { dts } from 'rollup-plugin-dts';
+import terser from '@rollup/plugin-terser';
 
 /**
  * @type {import('rollup').RollupOptions}
@@ -73,6 +74,22 @@ export default [
     input: 'src/web.ts',
     output: {
       file: 'dist/web.d.ts',
+      format: 'es',
+    },
+    plugins: [dts()],
+  },
+  {
+    input: 'src/app.ts',
+    output: {
+      file: 'dist/app.js',
+      format: 'iife',
+    },
+    plugins: [resolve({ browser: true }), commonjs(), typescript(), terser()],
+  },
+  {
+    input: 'src/app.ts',
+    output: {
+      file: 'dist/app.d.ts',
       format: 'es',
     },
     plugins: [dts()],
