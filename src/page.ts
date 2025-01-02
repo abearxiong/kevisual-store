@@ -7,8 +7,17 @@ const generateRandom = () => {
   return crypto.randomUUID();
 };
 type PageOptions = {
+  /**
+   * 路径
+   */
   path?: string;
+  /**
+   * key
+   */
   key?: string;
+  /**
+   * basename
+   */
   basename?: string;
   isListen?: boolean;
 };
@@ -23,7 +32,9 @@ type CallbackInfo = {
   fn: CallFn;
   id: string;
 } & PageModule;
-let currentUrl = location.href;
+/**
+ * 根据basename,其中的path和key，来判断一个应用的模块。
+ */
 export class Page {
   pageModule = new Map<string, PageModule>();
   // pathname的第一个路径
@@ -43,9 +54,8 @@ export class Page {
       this.listen();
     }
   }
-  popstate(event?: PopStateEvent, manualOpts?: { id?: string; type: 'singal' | 'all' }) {
-    const pathname = window.location.pathname;
-    console.log('popstate', event);
+  popstate(event?: PopStateEvent, manualOpts?: { id?: string; type: 'singal' | 'all'; pathname?: string }) {
+    const pathname = manualOpts?.pathname ?? window.location.pathname;
     if (manualOpts) {
       if (manualOpts.type === 'singal') {
         const item = this.callbacks.find((item) => item.id === manualOpts.id);
@@ -62,7 +72,17 @@ export class Page {
       result && item.fn?.(result.params, event.state, { event, manualOpts });
     });
   }
+  /**
+   * 调用callback中id或者pathname的函数, 其中id优先级高于pathname，若都没有，则从location.pathname中获取
+   * @param opts
+   */
+  call(opts?: { id?: string; pathname?: string }) {
+    this.popstate({ state: window.history.state } as any, { ...opts, type: 'all' });
+  }
   listen() {
+    if (this.isListen) {
+      return;
+    }
     this.isListen = true;
     window.addEventListener('popstate', this.popstate.bind(this), false);
   }
@@ -89,7 +109,7 @@ export class Page {
     });
   }
   /**
-   * 检查当前路径是否匹配
+   * 检查当前路径是否匹配, 如何提交pathname，则检查pathname
    * @param key
    * @param pathname
    * @returns
@@ -138,6 +158,7 @@ export class Page {
       const pathname = opts?.pathname ?? location.pathname;
       const result = this.check(key, pathname);
       if (result) {
+        // 如果是手动调用，则不需要检查是否相等，直接执行，而且是执行当前的subscribe的函数
         this.popstate({ state: window.history.state } as any, { id, type: 'singal' });
       }
     }
