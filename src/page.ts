@@ -54,6 +54,7 @@ export class Page {
       this.listen();
     }
   }
+
   popstate(event?: PopStateEvent, manualOpts?: { id?: string; type: 'singal' | 'all'; pathname?: string }) {
     const pathname = manualOpts?.pathname ?? window.location.pathname;
     if (manualOpts) {
@@ -166,6 +167,9 @@ export class Page {
       this.callbacks = this.callbacks.filter((item) => item.id !== id);
     };
   }
+  getPathKey() {
+    return getPathKey();
+  }
   /**
    * 返回当前路径，不包含basename
    * @returns
@@ -178,12 +182,26 @@ export class Page {
   getAppPath() {
     return this.path;
   }
+  /**
+   * 返回当前key
+   * @returns
+   */
   getAppKey() {
     return this.key;
   }
+  /**
+   * 解码路径
+   * @param path
+   * @returns
+   */
   decodePath(path: string) {
     return decodeURIComponent(path);
   }
+  /**
+   * 编码路径
+   * @param path
+   * @returns
+   */
   encodePath(path: string) {
     return encodeURIComponent(path);
   }
@@ -214,6 +232,12 @@ export class Page {
       this.popstate({ state } as any, { type: 'all' });
     }
   }
+  /**
+   * 替换当前路径
+   * @param path
+   * @param state
+   * @param check
+   */
   replace(path: string, state?: any, check?: boolean) {
     let _check = check ?? true;
     window.history.replaceState(state, '', this.basename + path);
@@ -221,6 +245,9 @@ export class Page {
       this.popstate({ state } as any, { type: 'all' });
     }
   }
+  /**
+   * 刷新当前页面
+   */
   refresh() {
     const state = window.history.state;
     this.popstate({ state } as any, { type: 'all' });
