@@ -1,6 +1,6 @@
 {
   "name": "@kevisual/store",
-  "version": "0.0.1-alpha.10",
+  "version": "0.0.1",
   "main": "dist/store.js",
   "module": "dist/store.js",
   "types": "dist/store.d.ts",
@@ -23,6 +23,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@kevisual/load": "workspace:*",
     "@kevisual/types": "link:../types",
     "@rollup/plugin-commonjs": "^28.0.1",
     "@rollup/plugin-node-resolve": "^15.3.0",
