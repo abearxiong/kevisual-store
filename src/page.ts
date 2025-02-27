@@ -49,6 +49,9 @@ export class Page {
     this.path = opts?.path ?? pathKey.path;
     this.key = opts?.key ?? pathKey.key;
     this.basename = opts?.basename ?? `/${this.path}/${this.key}`;
+    if(this.basename.endsWith('/')) {
+      this.basename = this.basename.slice(0, -1);
+    }
     const isListen = opts?.isListen ?? true;
     if (isListen) {
       this.listen();
