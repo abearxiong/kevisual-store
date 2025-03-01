@@ -5,11 +5,9 @@ import * as Load from '@kevisual/load/browser';
 import { Page } from './page.ts';
 
 // bind to window, 必须要的获取全局的环境变量
-const { useConfigKey, useConfigKeySync, useContextKey, useContextKeySync } = WebEnv;
+const { useConfigKey, useContextKey } = WebEnv;
 window.useConfigKey = useConfigKey;
-window.useConfigKeySync = useConfigKeySync;
 window.useContextKey = useContextKey;
-window.useContextKeySync = useContextKeySync;
 // @ts-ignore
 window.webEnv = WebEnv;
 // @ts-ignore
