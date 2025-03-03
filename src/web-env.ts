@@ -63,7 +63,17 @@ export const usePageEnv = (init?: () => {}, initKey = 'conifg') => {
   const { id } = getPathKey();
   return useEnvKey(id, init, initKey);
 };
-
+export const useEnvKeyNew = (key: string, initKey = 'conifg', opts?: { getNew?: boolean; init?: () => {} }) => {
+  const _env = useEnv({}, initKey);
+  if (key) {
+    delete _env[key];
+  }
+  if (opts?.getNew && opts.init) {
+    return useEnvKey(key, opts.init, initKey);
+  } else if (opts?.getNew) {
+    return useEnvKey(key, null, initKey);
+  }
+};
 type GlobalContext = {
   name?: string;
   [key: string]: any;
@@ -72,10 +82,12 @@ export const useContext = (initContext?: GlobalContext) => {
   return useEnv(initContext, 'context');
 };
 
-export const useContextKey = <T = any>(key: string, init?: () => T): T => {
+export const useContextKey = <T = any>(key: string, init?: () => T, isNew?: boolean): T => {
+  if (isNew) {
+    return useEnvKeyNew(key, 'context', { getNew: true, init });
+  }
   return useEnvKey(key, init, 'context');
 };
-
 
 export const usePageContext = (init?: () => {}) => {
   const { id } = getPathKey();
@@ -90,7 +102,10 @@ export const useConfig = (initConfig?: GlobalConfig) => {
   return useEnv(initConfig, 'config');
 };
 
-export const useConfigKey = <T = any>(key: string, init?: () => T): T => {
+export const useConfigKey = <T = any>(key: string, init?: () => T, isNew?: boolean): T => {
+  if (isNew) {
+    return useEnvKeyNew(key, 'config', { getNew: true, init });
+  }
   return useEnvKey(key, init, 'config');
 };
 

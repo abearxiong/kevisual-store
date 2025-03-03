@@ -12,8 +12,10 @@ window.useContextKey = useContextKey;
 window.webEnv = WebEnv;
 // @ts-ignore
 window.Load = Load;
-window.Page = Page;
 window.QueryRouterServer = QueryRouterServer;
 
 // bind to window, 获取路由对象
 useContextKey('app', () => new QueryRouterServer());
+useContextKey('page', () => {
+  return new Page();
+});

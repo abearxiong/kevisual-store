@@ -1,5 +1,5 @@
 import { getPathKey } from '@/utils/path-key.ts';
-import { match } from 'path-to-regexp';
+import * as pathToRegexp from 'path-to-regexp';
 import deepEqual from 'fast-deep-equal';
 
 const generateRandom = () => {
@@ -44,18 +44,47 @@ export class Page {
   basename: string;
   isListen: boolean;
   callbacks = [] as CallbackInfo[];
+  ok = false;
   constructor(opts?: PageOptions) {
     const pathKey = getPathKey();
     this.path = opts?.path ?? pathKey.path;
     this.key = opts?.key ?? pathKey.key;
-    this.basename = opts?.basename ?? `/${this.path}/${this.key}`;
-    if(this.basename.endsWith('/')) {
-      this.basename = this.basename.slice(0, -1);
+    if (opts?.basename) {
+      this.basename = opts?.basename;
+    } else {
+      if (this.key) {
+        this.basename = `/${this.path}/${this.key}`;
+      } else {
+        const location = window.location;
+        this.basename = location.pathname;
+      }
     }
+    this.clearEndSlash();
     const isListen = opts?.isListen ?? true;
     if (isListen) {
       this.listen();
     }
+    this.ok = !!this.key;
+  }
+  /**
+   * 清除路径的结尾斜杠，所有的最后的斜杠都删除
+   */
+  clearEndSlash() {
+    this.basename = this.basename.replace(/\/+$/, '');
+    return this;
+  }
+  /**
+   * 检查路径
+   */
+  checkPath() {
+    const pathKey = getPathKey();
+    const { path, key } = pathKey;
+    this.path = path || '';
+    this.key = key || '';
+    this.ok = !!this.key;
+    this.basename = `/${this.path}/${this.key}`;
+    this.clearEndSlash();
+    return this;
   }
 
   popstate(event?: PopStateEvent, manualOpts?: { id?: string; type: 'singal' | 'all'; pathname?: string }) {
@@ -130,8 +159,12 @@ export class Page {
     }
     const location = window.location;
     const _pathname = pathname || location.pathname;
+    if (!_pathname.includes(this.basename)) {
+      // console.error(`PageModule ${key} not found`);
+      return false;
+    }
     const cur = _pathname.replace(this.basename, '');
-    const routeMatch = match(pageModule.path, { decode: decodeURIComponent });
+    const routeMatch = pathToRegexp.match(pageModule.path, { decode: decodeURIComponent });
     const result = routeMatch(cur);
     let params = {};
     if (result) {
@@ -148,14 +181,15 @@ export class Page {
    * @param opts
    * @returns
    */
-  subscribe(key: string, fn?: CallFn, opts?: { pathname?: string; runImmediately?: boolean; id?: string }) {
+  async subscribe(key: string, fn?: CallFn, opts?: { pathname?: string; runImmediately?: boolean; id?: string }) {
     const runImmediately = opts?.runImmediately ?? true; // 默认立即执行
     const id = opts?.id ?? generateRandom();
-    const path = this.pageModule.get(key)?.path;
-    if (!path) {
+    const pageModule = this.pageModule.get(key);
+    if (!pageModule) {
       console.error(`PageModule ${key} not found`);
       return () => {};
     }
+    const path = pageModule?.path || '';
     this.callbacks.push({ key, fn, id: id, path });
     if (runImmediately) {
       const location = window.location;
@@ -212,7 +246,7 @@ export class Page {
    * 如果state 和 pathname都相等，则不执行popstate
    * @param path
    * @param state
-   * @param check
+   * @param check 是否检查, 默认检查
    * @returns
    */
   navigate(path: string | number, state?: any, check?: boolean) {
@@ -254,5 +288,18 @@ export class Page {
   refresh() {
     const state = window.history.state;
     this.popstate({ state } as any, { type: 'all' });
+  }
+  /**
+   * 检查路径是否匹配
+   * @param path
+   * @param checkPath
+   * @returns
+   */
+  pathMatch(regexpPath: string, checkPath: string) {
+    return pathToRegexp.match(regexpPath, { decode: decodeURIComponent })(checkPath);
+  }
+  pathToRegexp = pathToRegexp;
+  static match(regexpPath: string, checkPath: string) {
+    return pathToRegexp.match(regexpPath, { decode: decodeURIComponent })(checkPath);
   }
 }
