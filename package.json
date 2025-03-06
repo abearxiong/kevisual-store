@@ -70,7 +70,7 @@
     }
   },
   "dependencies": {
-    "@kevisual/router": "0.0.7",
+    "@kevisual/router": "workspace:*",
     "@rollup/plugin-terser": "^0.4.4",
     "eventemitter3": "^5.0.1",
     "path-to-regexp": "^8.2.0"
