@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    // "jsx": "react",
+    // "jsxFragmentFactory": "Fragment",
+    // "jsxFactory": "h",
+    "jsx": "react-jsx",
+    "baseUrl": "./",
+    "typeRoots": [
+      "node_modules/@types",
+      "node_modules/@kevisual/types",
+    ],
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
+    /* Linting */
+    "strict": true,
+    "noImplicitAny": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": [
+    "src",
+    "typings.d.ts"
+  ]
+}

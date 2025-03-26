@@ -20,7 +20,22 @@ export class StoreManager {
     this.stores[key] = createZutandStore(initialStore);
     return this.stores[key] as StoreApi<T>;
   }
-  create<T = any, U extends T = any>(initialStore: StateCreator<T, [], [], U>, key: string) {
+  create<T extends Record<string, any>, U extends T = T>(initialStore: StateCreator<T, [], [], U>, key: string) {
+    return this.createStore(initialStore, key) as StoreApi<T>;
+  }
+  createIfNotExists<T extends Record<string, any>, U extends T = T>(
+    initialStore: StateCreator<T, [], [], U>,
+    key: string,
+    opts?: {
+      force?: boolean;
+    },
+  ): StoreApi<T> {
+    if (this.stores[key] && !opts?.force) {
+      return this.stores[key];
+    }
+    if (this.stores[key] && opts?.force) {
+      this.removeStore(key);
+    }
     return this.createStore(initialStore, key);
   }
   getStore(key: string) {
@@ -84,8 +99,8 @@ export const sub = <T = any>(fn: FnListener<T>, { path, deep, store }: SubOption
   }
   return store.subscribe((newState: T, oldState: T) => {
     try {
-      const newPath = get(newState, path);
-      const oldPath = get(oldState, path);
+      const newPath = get(newState, path as string);
+      const oldPath = get(oldState, path as string);
       if (!newPath && !oldPath) {
         // 都不存在
         return;
