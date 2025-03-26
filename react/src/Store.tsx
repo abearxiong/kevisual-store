@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { StateCreator } from '../../src/store';
 import { shallow, useShallow } from 'zustand/shallow';
 import { useContextKey } from '../../src/web-context';
-
+import { UseBoundStore, StoreApi } from 'zustand';
 export const StoreContext = createContext<any>(null);
 
 export const initStoreFn: StateCreator<any, [], [], any> = (set, get, store) => {
@@ -38,7 +38,9 @@ export const StoreContextProvider = ({
   return <StoreContext.Provider value={state}>{children}</StoreContext.Provider>;
 };
 
-export const useStore = (selector?: any) => {
+type SimpleObject = Record<string, any>;
+
+export const useStore = (selector: any): any => {
   const store = useContext(StoreContext);
   const allState = store.getState();
   const selectedState = selector ? selector(allState) : allState;
@@ -56,3 +58,5 @@ export const useStore = (selector?: any) => {
 
   return state;
 };
+
+export type BoundStore<T> = UseBoundStore<StoreApi<T>>;
