@@ -1,6 +1,6 @@
 {
   "name": "@kevisual/store",
-  "version": "0.0.1-alpha.5",
+  "version": "0.0.3",
   "main": "dist/store.js",
   "module": "dist/store.js",
   "types": "dist/store.d.ts",
