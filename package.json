@@ -11,11 +11,12 @@
     "dev:lib": "rollup -c -w",
     "build": "npm run clean && rollup -c",
     "build:app": "npm run build && rsync dist/* ../deploy/dist",
+    "build:lib": "npm run build",
     "clean": "rm -rf dist"
   },
   "files": [
     "dist",
-    "react/dist"
+    "dist-react"
   ],
   "keywords": [
     "kevisual",
@@ -39,6 +40,7 @@
     "tslib": "^2.8.1",
     "tsup": "^8.4.0",
     "typescript": "^5.8.2",
+    "vite-plugin-dts": "^4.5.3",
     "zustand": "^5.0.3"
   },
   "publishConfig": {
@@ -70,8 +72,8 @@
       "require": "./dist/web.js"
     },
     "./react": {
-      "import": "./react/dist/store-react.js",
-      "types": "./react/dist/index.d.ts"
+      "import": "./dist-react/store-react.js",
+      "types": "./dist-react/index.d.ts"
     }
   },
   "dependencies": {

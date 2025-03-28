@@ -8,6 +8,7 @@ export default defineConfig({
       entry: './src/index.ts',
       formats: ['es'],
     },
+    outDir: '../dist-react',
     emptyOutDir: true,
     sourcemap: true,
     rollupOptions: {
@@ -18,7 +19,7 @@ export default defineConfig({
     react(),
     dts({
       insertTypesEntry: true,
-      outputDir: './dist/types',
+      outputDir: '../dist-react/types',
     }),
   ],
 });
