@@ -40,7 +40,7 @@ export const StoreContextProvider = ({
 
 type SimpleObject = Record<string, any>;
 
-export const useStore = (selector: any): any => {
+export const useStore = function (selector: any): any {
   const store = useContext(StoreContext);
   const allState = store.getState();
   const selectedState = selector ? selector(allState) : allState;
@@ -58,5 +58,34 @@ export const useStore = (selector: any): any => {
 
   return state;
 };
-
-export type BoundStore<T> = UseBoundStore<StoreApi<T>>;
+useStore.getState = function (id: string) {
+  const store = useContextKey<any>('store');
+  if (!store) {
+    console.error('store not found');
+    return null;
+  }
+  return store.getStore(id).getState();
+};
+useStore.setState = function (id: string, state: any) {
+  const store = useContextKey<any>('store');
+  if (!store) {
+    console.error('store not found');
+    return null;
+  }
+  store.getStore(id).setState(state);
+};
+useStore.subscribe = function (fn: any) {
+  const store = useContextKey<any>('store');
+  if (!store) {
+    console.error('store not found');
+    return null;
+  }
+  return store.subscribe(fn);
+};
+export type BoundStore<T> = UseBoundStore<StoreApi<T>> & {
+  getState: (id: string) => T;
+  setState: (id: string, state: T) => void;
+  subscribe: (fn: (state: T) => void) => () => void;
+  createStore: (stateCreator: StateCreator<any, [], [], any>) => void;
+  createIfNotExists: (stateCreator: StateCreator<any, [], [], any>) => void;
+};

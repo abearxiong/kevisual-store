@@ -1,6 +1,6 @@
 {
   "name": "@kevisual/store",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "dist/store.js",
   "module": "dist/store.js",
   "types": "dist/store.d.ts",
@@ -63,7 +63,7 @@
       "import": "./dist/web-context.js",
       "require": "./dist/web-context.js"
     },
-    "./page": {
+    "./web-page.js": {
       "import": "./dist/web-page.js",
       "require": "./dist/web-page.js"
     },

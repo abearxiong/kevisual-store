@@ -199,3 +199,31 @@ export class Page {
     this.popstate({ state } as any, { type: 'all' });
   }
 }
+/**
+ * 获取history state
+ * @returns
+ */
+export const getHistoryState = <T = Record<string, any>>() => {
+  const history = window.history;
+  const state = history.state || {};
+  return state as T;
+};
+
+/**
+ * 设置history state
+ * @param state
+ */
+export const setHistoryState = (state: any) => {
+  const history = window.history;
+  const oldState = getHistoryState();
+  // 只更新 state 而不改变 URL
+  history.replaceState({ ...oldState, ...state }, '', window.location.href);
+};
+
+/**
+ * 清除history state
+ */
+export const clearHistoryState = () => {
+  const history = window.history;
+  history.replaceState({}, '', window.location.href);
+};
