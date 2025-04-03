@@ -1,4 +1,5 @@
 console.log('index.js');
+//@ts-ignore
 import { Page } from '@kevisual/store/page';
 
 const page = new Page({
