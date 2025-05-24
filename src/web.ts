@@ -1,7 +1,14 @@
-export * from './page.ts';
-export * from './web-env.ts';
+import { Page } from './page.ts';
+import * as WebEnv from './web-env.ts';
 
-export * from 'nanoid';
-export * from 'path-to-regexp';
+import { nanoid } from 'nanoid';
+import * as PathToREgexp from 'path-to-regexp';
+import * as Load from '@kevisual/load/browser';
 
-export * from 'eventemitter3';
+export const WebModule = {
+  Page,
+  WebEnv,
+  nanoid,
+  PathToREgexp,
+  Load,
+};

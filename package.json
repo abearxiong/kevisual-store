@@ -1,6 +1,6 @@
 {
   "name": "@kevisual/store",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "main": "dist/store.js",
   "module": "dist/store.js",
   "types": "dist/store.d.ts",
@@ -26,6 +26,8 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@kevisual/load": "workspace:*",
+    "@kevisual/types": "link:../types",
     "@rollup/plugin-commonjs": "^28.0.3",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-typescript": "^12.1.2",
@@ -34,14 +36,16 @@
     "immer": "^10.1.1",
     "lodash-es": "^4.17.21",
     "nanoid": "^5.1.5",
-    "rollup": "^4.37.0",
+    "rollup": "^4.41.1",
     "rollup-plugin-dts": "^6.2.1",
     "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
-    "tsup": "^8.4.0",
-    "typescript": "^5.8.2",
-    "vite-plugin-dts": "^4.5.3",
-    "zustand": "^5.0.3"
+    "typescript": "^5.8.3",
+    "zustand": "^5.0.5",
+    "@kevisual/router": "^0.0.21",
+    "@rollup/plugin-terser": "^0.4.4",
+    "eventemitter3": "^5.0.1",
+    "path-to-regexp": "^8.2.0"
   },
   "publishConfig": {
     "access": "public"
@@ -60,8 +64,8 @@
       "require": "./dist/web-config.js"
     },
     "./context": {
-      "import": "./dist/web-context.js",
-      "require": "./dist/web-context.js"
+      "import": "./dist/web-config.js",
+      "require": "./dist/web-config.js"
     },
     "./web-page.js": {
       "import": "./dist/web-page.js",
@@ -76,8 +80,5 @@
       "types": "./dist-react/index.d.ts"
     }
   },
-  "dependencies": {
-    "eventemitter3": "^5.0.1",
-    "path-to-regexp": "^8.2.0"
-  }
+  "dependencies": {}
 }
