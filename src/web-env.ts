@@ -1,22 +1,23 @@
 import { getPathKey } from './utils/path-key.ts';
 import { BaseLoad } from '@kevisual/load';
 
+const gt = (globalThis as any) || window || self;
 type GlobalEnv = {
   name?: string;
   [key: string]: any;
 };
 // 从window对象中获取全局的环境变量，如果没有则初始化一个
 export const useEnv = (initEnv?: GlobalEnv, initKey = 'config') => {
-  const env: GlobalEnv = (window as any)[initKey];
+  const env: GlobalEnv = gt[initKey];
   const _env = env || initEnv;
   if (!env) {
     if (_env) {
-      (window as any)[initKey] = _env;
+      gt[initKey] = _env;
     } else {
-      (window as any)[initKey] = {};
+      gt[initKey] = {};
     }
   }
-  return window[initKey] as GlobalEnv;
+  return gt[initKey] as GlobalEnv;
 };
 
 // 从全局环境变量中获取指定的key值，如果没有则初始化一个, key不存在，返回Env对象
@@ -113,3 +114,25 @@ export const usePageConfig = (init?: () => {}) => {
   const { id } = getPathKey();
   return useConfigKey(id, init);
 };
+
+class InitEnv {
+  static isInit = false;
+
+  static init(opts?: { load?: boolean; page?: boolean }) {
+    if (InitEnv.isInit) {
+      return;
+    }
+    const { load = true, page = false } = opts || {};
+    InitEnv.isInit = true;
+    // bind to window, 必须要的获取全局的环境变量
+    // @ts-ignore
+    gt.useConfigKey = useConfigKey;
+    // @ts-ignore
+    gt.useContextKey = useContextKey;
+    // @ts-ignore
+    gt.webEnv = { useConfigKey, useContextKey };
+    // @ts-ignore
+    load && (gt.Load = BaseLoad);
+  }
+}
+InitEnv.init();
