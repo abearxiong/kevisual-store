@@ -30,7 +30,7 @@ export default [
     plugins: [dts()],
   },
   {
-    input: 'src/web-config.ts',
+    input: 'src/web-env.ts',
     output: {
       file: 'dist/web-config.js',
       format: 'es',
@@ -38,25 +38,9 @@ export default [
     plugins: [resolve({ browser: true }), commonjs(), typescript()],
   },
   {
-    input: 'src/web-config.ts',
+    input: 'src/web-env.ts',
     output: {
       file: 'dist/web-config.d.ts',
-      format: 'es',
-    },
-    plugins: [dts()],
-  },
-  {
-    input: 'src/web-context.ts',
-    output: {
-      file: 'dist/web-context.js',
-      format: 'es',
-    },
-    plugins: [resolve({ browser: true }), commonjs(), typescript()],
-  },
-  {
-    input: 'src/web-context.ts',
-    output: {
-      file: 'dist/web-context.d.ts',
       format: 'es',
     },
     plugins: [dts()],

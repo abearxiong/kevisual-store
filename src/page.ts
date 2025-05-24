@@ -2,6 +2,10 @@ import { getPathKey } from '@/utils/path-key.ts';
 import { match } from 'path-to-regexp';
 import deepEqual from 'fast-deep-equal';
 
+const generateRandom = () => {
+  // return Math.random().toString(36).substring(8);
+  return crypto.randomUUID();
+};
 type PageOptions = {
   path?: string;
   key?: string;
@@ -19,6 +23,7 @@ type CallbackInfo = {
   fn: CallFn;
   id: string;
 } & PageModule;
+let currentUrl = location.href;
 export class Page {
   pageModule = new Map<string, PageModule>();
   // pathname的第一个路径
@@ -40,6 +45,7 @@ export class Page {
   }
   popstate(event?: PopStateEvent, manualOpts?: { id?: string; type: 'singal' | 'all' }) {
     const pathname = window.location.pathname;
+    console.log('popstate', event);
     if (manualOpts) {
       if (manualOpts.type === 'singal') {
         const item = this.callbacks.find((item) => item.id === manualOpts.id);
@@ -120,7 +126,7 @@ export class Page {
    */
   subscribe(key: string, fn?: CallFn, opts?: { pathname?: string; runImmediately?: boolean; id?: string }) {
     const runImmediately = opts?.runImmediately ?? true; // 默认立即执行
-    const id = opts?.id ?? Math.random().toString(36).slice(2);
+    const id = opts?.id ?? generateRandom();
     const path = this.pageModule.get(key)?.path;
     if (!path) {
       console.error(`PageModule ${key} not found`);
