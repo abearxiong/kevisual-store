@@ -62,36 +62,4 @@ export default [
     },
     plugins: [dts()],
   },
-  {
-    input: 'src/web.ts',
-    output: {
-      file: 'dist/web.js',
-      format: 'es',
-    },
-    plugins: [resolve({ browser: true }), commonjs(), typescript()],
-  },
-  {
-    input: 'src/web.ts',
-    output: {
-      file: 'dist/web.d.ts',
-      format: 'es',
-    },
-    plugins: [dts()],
-  },
-  {
-    input: 'src/app.ts',
-    output: {
-      file: 'dist/app.js',
-      format: 'iife',
-    },
-    plugins: [resolve({ browser: true }), commonjs(), typescript(), terser()],
-  },
-  {
-    input: 'src/app.ts',
-    output: {
-      file: 'dist/app.d.ts',
-      format: 'es',
-    },
-    plugins: [dts()],
-  },
 ];

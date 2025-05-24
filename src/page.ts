@@ -277,7 +277,13 @@ export class Page {
    */
   replace(path: string, state?: any, check?: boolean) {
     let _check = check ?? true;
-    window.history.replaceState(state, '', this.basename + path);
+    let newPath = this.basename + path;
+    if (path.startsWith('http')) {
+      const url = new URL(path);
+      const origin = url.origin;
+      newPath = url.toString().replace(origin, '');
+    }
+    window.history.replaceState(state, '', newPath);
     if (_check) {
       this.popstate({ state } as any, { type: 'all' });
     }
@@ -317,17 +323,16 @@ export const getHistoryState = <T = Record<string, any>>() => {
  * 设置history state
  * @param state
  */
-export const setHistoryState = (state: any) => {
+export const setHistoryState = (state: any, url?: string) => {
   const history = window.history;
   const oldState = getHistoryState();
-  // 只更新 state 而不改变 URL
-  history.replaceState({ ...oldState, ...state }, '', window.location.href);
+  history.replaceState({ ...oldState, ...state }, '', url || window.location.href);
 };
 
 /**
  * 清除history state
  */
-export const clearHistoryState = () => {
+export const clearHistoryState = (url?: string) => {
   const history = window.history;
-  history.replaceState({}, '', window.location.href);
+  history.replaceState({}, '', url || window.location.href);
 };
